@@ -341,17 +341,6 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
               <label>Pixel color</label>
             </div>
           </Grid>
-          <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', pt: 0,}}>
-            <div style={{ display: 'flex', alignItems: 'center', }}>
-              <input
-                style={{ border: "none", backgroundColor: "white", padding: 0, margin: 0, marginRight: '12px' }}
-                type='checkbox'
-                id='toggleGrid'
-                checked={showGrid}
-                onChange={() => { setShowGrid(!showGrid) }}
-              />
-            </div>
-          </Grid>
           <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', paddingTop: 0, }}>
             <div style={{ display: 'flex', alignItems: 'center', }}>
               <input
@@ -377,17 +366,6 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
                 onChange={(e) => setNumPixelsPerSide(parseInt(e.target.value))}
               />
               <label>Pixels per side</label>
-            </div>
-          </Grid>
-          <Grid item xs={6} sx={{ margin: 0, pt: 0, }}>
-            <div style={{ paddingTop: 0 }}>
-              <label>Show Guides on Post? </label>
-              <input
-                type='checkbox'
-                id='toggleShowGridInViewMode'
-                checked={showGridInViewMode}
-                onChange={() => { setShowGridInViewMode(!showGridInViewMode) }}
-              />
             </div>
           </Grid>
           <Grid item xs={6} sx={{ margin: 0, pt: 0, }}>
