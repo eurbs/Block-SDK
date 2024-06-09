@@ -10,6 +10,30 @@ import { SizeMe, SizeMeProps } from 'react-sizeme';
 import { Button, Stack, Grid } from '@mui/material';
 import SeamSaveButton from '../components/SeamSaveButton';
 
+interface ToggleInputProps {
+  checked: boolean;
+  onChange: () => void;
+  children?: React.ReactNode
+}
+
+const ToggleInput: React.FC<ToggleInputProps> = (props: ToggleInputProps) => {
+  return (
+    <label className='relative flex items-center content-start group text-sm'>
+      <input
+        type='checkbox'
+        id='toggleGrid'
+        className='absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md'
+        checked={props.checked}
+        onChange={props.onChange}
+      />
+      <span className='w-12 h-8 flex items-center flex-shrink-0 p-1 bg-gray-300 rounded-full duration-300 ease-in-out peer-checked:bg-green-400 after:w-6 after:h-6 after:bg-white after:rounded-full after:shadow-md after:duration-300 peer-checked:after:translate-x-4'></span>
+      <span className='pl-2'>
+        { props.children && props.children }
+      </span>
+    </label>
+  )
+};
+
 interface BasePixelCanvasProps {
   initialNumPixelsPerSide: number;          // e.g. '5' represents a 5x5 pixel grid
   isEditMode: boolean;                      // True if edit mode, false if display mode
@@ -276,6 +300,34 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
   return (
     <div>
       {isEditMode &&
+        <div className='my-4'>
+          <div className='grid grid-cols-2 content-start gap-2'>
+            <ToggleInput
+              checked={showGrid}
+              onChange={() => { setShowGrid(!showGrid)} }
+            >
+              Show guides
+            </ToggleInput>
+            <ToggleInput
+              checked={showGridInViewMode}
+              onChange={() => { setShowGridInViewMode(!showGridInViewMode)} }
+            >
+              Show guides on post
+            </ToggleInput>
+          </div>
+        </div>
+      }
+      <canvas
+        ref={canvasRef}
+        width={width}
+        height={height}
+        style={canvasStyles}
+        onMouseDown={handleCanvasClick}
+        onMouseMove={handleCanvasDrag}
+        onMouseUp={() => setIsMouseDownOnCanvas(false)}
+        onContextMenu={(e) => e.preventDefault()}
+      />
+      {isEditMode &&
         <Grid container spacing={0} sx={{pt: 0,}} justifyContent='center'>
           <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', pt: 0, }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
@@ -298,7 +350,6 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
                 checked={showGrid}
                 onChange={() => { setShowGrid(!showGrid) }}
               />
-              <label>Show guides</label>
             </div>
           </Grid>
           <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', paddingTop: 0, }}>
@@ -344,16 +395,6 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
           </Grid>
         </Grid>
       }
-      <canvas
-        ref={canvasRef}
-        width={width}
-        height={height}
-        style={canvasStyles}
-        onMouseDown={handleCanvasClick}
-        onMouseMove={handleCanvasDrag}
-        onMouseUp={() => setIsMouseDownOnCanvas(false)}
-        onContextMenu={(e) => e.preventDefault()}
-      />
       {isEditMode && <SeamSaveButton onClick={savePixelState} />}
     </div>
   );
