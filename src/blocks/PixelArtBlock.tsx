@@ -11,6 +11,7 @@ import { Button, Stack, Grid } from '@mui/material';
 import SeamSaveButton from '../components/SeamSaveButton';
 
 interface ToggleInputProps {
+  id: string;
   checked: boolean;
   onChange: () => void;
   children?: React.ReactNode
@@ -18,10 +19,10 @@ interface ToggleInputProps {
 
 const ToggleInput: React.FC<ToggleInputProps> = (props: ToggleInputProps) => {
   return (
-    <label className='relative flex items-center content-start group text-sm'>
+    <label id={`${props.id}-label`} className='relative flex items-center content-start group text-sm'>
       <input
         type='checkbox'
-        id='toggleGrid'
+        id={props.id}
         className='absolute left-1/2 -translate-x-1/2 w-full h-full peer appearance-none rounded-md'
         checked={props.checked}
         onChange={props.onChange}
@@ -303,12 +304,14 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
         <div className='my-4'>
           <div className='grid grid-cols-2 content-start gap-2'>
             <ToggleInput
+              id='showGrid'
               checked={showGrid}
               onChange={() => { setShowGrid(!showGrid)} }
             >
               Show guides
             </ToggleInput>
             <ToggleInput
+              id='showGridInViewMode'
               checked={showGridInViewMode}
               onChange={() => { setShowGridInViewMode(!showGridInViewMode)} }
             >
