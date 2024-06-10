@@ -7,8 +7,57 @@ import SaveButton from '../components/SeamSaveButton';
 import CSS from 'csstype';
 import React, { useEffect, useRef, useState } from 'react';
 import { SizeMe, SizeMeProps } from 'react-sizeme';
-import { Button, Stack, Grid } from '@mui/material';
+import { Button, Stack, Grid, styled, Slider } from '@mui/material';
 import SeamSaveButton from '../components/SeamSaveButton';
+
+const iOSBoxShadow =
+  '0 3px 1px rgba(0,0,0,0.1),0 4px 8px rgba(0,0,0,0.13),0 0 0 1px rgba(0,0,0,0.02)';
+
+const IOSSlider = styled(Slider)(({ theme }) => ({
+  color: theme.palette.mode === 'dark' ? '#0a84ff' : '#007bff',
+  height: 5,
+  padding: '15px 0',
+  '& .MuiSlider-thumb': {
+    height: 20,
+    width: 20,
+    backgroundColor: '#fff',
+    boxShadow: '0 0 2px 0px rgba(0, 0, 0, 0.1)',
+    '&:focus, &:hover, &.Mui-active': {
+      boxShadow: '0px 0px 3px 1px rgba(0, 0, 0, 0.1)',
+      // Reset on touch devices, it doesn't add specificity
+      '@media (hover: none)': {
+        boxShadow: iOSBoxShadow,
+      },
+    },
+    '&:before': {
+      boxShadow:
+        '0px 0px 1px 0px rgba(0,0,0,0.2), 0px 0px 0px 0px rgba(0,0,0,0.14), 0px 0px 1px 0px rgba(0,0,0,0.12)',
+    },
+  },
+  '& .MuiSlider-valueLabel': {
+    fontSize: 12,
+    fontWeight: 'normal',
+    top: -6,
+    backgroundColor: 'unset',
+    color: theme.palette.text.primary,
+    '&::before': {
+      display: 'none',
+    },
+    '& *': {
+      background: 'transparent',
+      color: theme.palette.mode === 'dark' ? '#fff' : '#000',
+    },
+  },
+  '& .MuiSlider-track': {
+    border: 'none',
+    height: 5,
+  },
+  '& .MuiSlider-rail': {
+    opacity: 0.5,
+    boxShadow: 'inset 0px 0px 4px -2px #000',
+    backgroundColor: '#d0d0d0',
+  },
+}));
 
 interface ToggleInputProps {
   id: string;
@@ -330,6 +379,22 @@ const PixelCanvas: React.FC<PixelCanvasProps> = (props: PixelCanvasProps) => {
         onMouseUp={() => setIsMouseDownOnCanvas(false)}
         onContextMenu={(e) => e.preventDefault()}
       />
+      {isEditMode &&
+        <div className='my-4'>
+          <div id='sidesPerPixelInput'>
+            <input
+              type='range'
+              id='pixelsPerSideInput'
+              min={2}
+              max={30}
+              value={numPixelsPerSide}
+              onChange={(e) => setNumPixelsPerSide(parseInt(e.target.value))}
+            />
+            <label>Pixels per side</label>
+          </div>
+          <IOSSlider min={2} max={30} value={numPixelsPerSide} onChange={(_, value) => setNumPixelsPerSide(value)} />
+        </div>
+      }
       {isEditMode &&
         <Grid container spacing={0} sx={{pt: 0,}} justifyContent='center'>
           <Grid item xs={6} sx={{ display: 'flex', alignItems: 'center', pt: 0, }}>
